@@ -3,17 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    protected $repository;
+
+    public function __construct(Category $model)
+    {
+        $this->repository = $model;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(['categories']);
+        $categories = $this->repository->get();
+        return CategoryResource::collection($categories);
     }
 
     /**
