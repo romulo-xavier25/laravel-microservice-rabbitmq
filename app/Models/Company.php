@@ -10,4 +10,9 @@ class Company extends Model
         'name', 'url', 'phone', 'whatsapp', 'email',
         'facebook', 'instagram', 'youtube', 'is_active'
     ];
+
+    public function companies()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
