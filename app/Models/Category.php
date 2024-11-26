@@ -8,7 +8,7 @@ class Category extends Model
 {
     protected $fillable = ['title', 'url', 'description', 'created_at', 'updated_at'];
 
-    public function companies()
+    public function companies(): HasMany
     {
         return $this->hasMany(Company::class);
     }
