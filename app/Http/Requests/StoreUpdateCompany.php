@@ -21,15 +21,17 @@ class StoreUpdateCompany extends FormRequest
      */
     public function rules(): array
     {
+        $uuid = $this->company;
+
         return [
-            'category_id'    => ['required', 'integer', 'exists:categories,id'],
-            'name'          => ['required', 'min:3', 'max:255', 'unique:companies,name'],
-            'whatsapp'      => ['required', 'unique:companies,whatsapp'],
-            'email'      => ['required', 'email', 'unique:companies,email'],
-            'phone'      => ['nullable', 'unique:companies,phone'],
-            'facebook'      => ['nullable', 'unique:companies,facebook'],
-            'instagram'      => ['nullable', 'unique:companies,instagram'],
-            'youtube'      => ['nullable', 'unique:companies,youtube'],
+            'category_id'   => ['required', 'integer', 'exists:categories,id'],
+            'name'          => ['required', 'min:3', 'max:255', "unique:companies,name,$uuid,uuid"],
+            'whatsapp'      => ['required', "unique:companies,whatsapp,$uuid,uuid"],
+            'email'      => ['required', 'email', "unique:companies,email,$uuid,uuid"],
+            'phone'      => ['nullable', "unique:companies,phone,$uuid,uuid"],
+            'facebook'      => ['nullable', "unique:companies,facebook,$uuid,uuid"],
+            'instagram'      => ['nullable', "unique:companies,instagram,$uuid,uuid"],
+            'youtube'      => ['nullable', "unique:companies,youtube,$uuid,uuid"],
         ];
     }
 }

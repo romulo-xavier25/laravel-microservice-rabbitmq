@@ -53,18 +53,28 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreUpdateCompany $request, string $id)
+    public function update(StoreUpdateCompany $request, string $uuid)
     {
         try {
-
+            $company = $this->repository->where('uuid', $uuid)->firstOrFail();
+            $company->update($request->validated());
+            return response()->json(['message' => 'empresa atualizada.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'não foi possível atualizar a empresa.'], 404);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        try {
+            $company = $this->repository->where('uuid', $uuid)->firstOrFail();
+            $company->delete();
+            return response()->json([], 204);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'não foi encontrada nenhuma empresa.'], 404);
+        }
     }
 }
