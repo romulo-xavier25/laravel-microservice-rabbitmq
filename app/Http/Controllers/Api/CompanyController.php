@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateCompany;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
+use App\Services\CompanyService;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -19,12 +21,9 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = $this->repository
-                          ->with('category')
-                          ->paginate();
-
+        $companies = CompanyService::getCompanies($request->get('filter', ''));
         return CompanyResource::collection($companies);
     }
 
