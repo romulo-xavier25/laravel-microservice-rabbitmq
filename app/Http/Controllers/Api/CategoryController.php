@@ -51,9 +51,15 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreUpdateCategory $request, string $url)
     {
-        //
+        try {
+            $category = $this->repository->where('url', $url)->firstOrFail();
+            $category->update($request->validated());
+            return response()->json(['message' => 'categoria atualizada com sucesso!']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
     }
 
     /**
