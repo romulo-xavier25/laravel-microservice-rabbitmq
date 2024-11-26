@@ -38,9 +38,14 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $url)
     {
-        //
+        try {
+            $category = $this->repository->where('url', $url)->firstOrFail();
+            return new CategoryResource($category);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
     }
 
     /**
