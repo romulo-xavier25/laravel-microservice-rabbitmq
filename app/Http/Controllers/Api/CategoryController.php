@@ -65,8 +65,15 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $url)
     {
-        //
+        try {
+            $category = $this->repository->where('url', $url)->firstOrFail();
+            $category->delete();
+            return response()->json([], 204);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'não foi encontrada nenhuma categoria com a url passada'], 404);
+        }
+
     }
 }
