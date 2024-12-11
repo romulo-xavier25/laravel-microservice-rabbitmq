@@ -1,4 +1,3 @@
-version: "3.7"
 
 networks:
     microservices:
@@ -18,6 +17,9 @@ services:
         working_dir: /var/www/
         volumes:
             - ./:/var/www
+        depends_on:
+            - redis
+            - queue
         networks:
             - microservices
 
@@ -47,5 +49,28 @@ services:
             MYSQL_USER: ${DB_USERNAME}
         volumes:
             - ./docker/.mysql/:/var/lib/mysql
+        networks:
+            - microservices
+
+    queue:
+        build:
+            args:
+                user: romulo
+                uid: 1000
+            context: ./
+            dockerfile: docker/php/Dockerfile
+        restart: unless-stopped
+        command: "php artisan queue:work"
+        container_name: queue
+        volumes:
+            - ./:/var/www
+        depends_on:
+            -   redis
+        networks:
+            - microservices
+
+    redis:
+        image: redis:latest
+        container_name: redis
         networks:
             - microservices
